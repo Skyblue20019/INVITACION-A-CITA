@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Invitación Especial 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      width: 360px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      position: relative;
+      animation: aparecer 1.2s ease;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      color: #ff4d6d;
+      animation: latido 1.5s infinite;
+    }
+
+    @keyframes latido {
+      50% { transform: scale(1.08); }
+    }
+
+    p {
+      color: #555;
+      margin: 15px 0;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      position: relative;
+      height: 60px;
+    }
+
+    button {
+      border: none;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .yes {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    .no {
+      background: #ccc;
+      color: #333;
+      user-select: none;
+    }
+
+    .respuesta {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #ff4d6d;
+      min-height: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Hola 💖</h1>
+
+Señorita Katherine 🌹<br>
+Me encantaría invitarte a una cita este sábado a las 6:00 PM.<br>
+Spoiler: Tú eres la protagonista<br>
+Ponte hermosa… aunque sé que eso te sale natural ✨<br>
+Que de lo demas me encargo yo .💖
+
+    <p>¿Te gustaría salir conmigo? 😊</p>
+
+    <div class="buttons">
+      <button class="yes" onclick="aceptar()">Sí 💕</button>
+      <button class="no" id="btnNo">No 🙈</button>
+    </div>
+
+    <div id="respuesta" class="respuesta"></div>
+  </div>
+
+  <script>
+    const btnNo = document.getElementById("btnNo");
+    const respuesta = document.getElementById("respuesta");
+    const buttons = document.querySelector(".buttons");
+
+    let intentos = 0;
+    const risas = ["😂 JAJA", "😜 nope", "🤣 intenta otra vez", "😈 casi", "😏 uy no"];
+
+    // 🔊 Sonido cartoon estilo Looney Tunes
+    function sonidoCartoon() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "square";
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.2);
+
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    }
+
+    // 😈 Botón NO huye
+    btnNo.addEventListener("mouseover", () => {
+      if (intentos >= 5) return;
+
+      intentos++;
+      sonidoCartoon();
+
+      btnNo.style.position = "absolute";
+      btnNo.style.zIndex = "10";
+      btnNo.textContent = risas[Math.floor(Math.random() * risas.length)];
+
+      const rect = buttons.getBoundingClientRect();
+      const btnRect = btnNo.getBoundingClientRect();
+
+      const maxX = rect.width - btnRect.width;
+      const maxY = rect.height + 40;
+
+      btnNo.style.left = Math.random() * maxX + "px";
+      btnNo.style.top = Math.random() * maxY + "px";
+
+      if (intentos === 5) {
+        setTimeout(() => {
+          btnNo.style.display = "none";
+          respuesta.innerText = "El botón 'No' se rindió 😂💀";
+        }, 400);
+      }
+    });
+
+    // 💚 BOTÓN SÍ → WhatsApp
+    function aceptar() {
+      respuesta.innerText =
+        "Sabía que dirías que sí 💘✨ Abriendo WhatsApp...";
+
+      const numero = "51918115425"; // 👈 CAMBIA AQUÍ TU NÚMERO
+      const mensaje = encodeURIComponent(
+       "Acepto la invitacion <3 "
+      );
+
+      setTimeout(() => {
+        window.open(
+          `https://wa.me/${numero}?text=${mensaje}`,
+          "_blank"
+        );
+      }, 800);
+    }
+  </script>
+
+</body>
+</html>
